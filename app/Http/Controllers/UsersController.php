@@ -19,7 +19,7 @@ class UsersController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * 注册页面
      *
      * @return \Illuminate\Http\Response
      */
@@ -29,14 +29,20 @@ class UsersController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 注册逻辑
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+        //验证
+        $this->validate(request(),[
+            'name' => 'bail|required|min:5|max:10|unique:users',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|confirmed',
+        ]);
+        return;
     }
 
     /**
