@@ -4,6 +4,7 @@
 <head>
     <title>@yield('title', 'Weibo App')</title>
     <link rel="stylesheet" href="/css/app.css">
+    <script src="/js/app.js"></script>
 </head>
 
 <body>

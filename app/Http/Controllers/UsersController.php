@@ -40,9 +40,16 @@ class UsersController extends Controller
         $this->validate(request(),[
             'name' => 'bail|required|min:5|max:10|unique:users',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|confirmed',
+            'password' => 'required|confirmed|min:6',
         ]);
-        return;
+        $user = User::create([
+            'name'=>request('name'),
+            'email'=>request('email'),
+            'password'=>bcrypt(request('password')),
+        ]);
+        Auth::login($user);
+        session()->flash('success','登录成功');
+        return redirect()->route('users.show',[$user]);
     }
 
     /**
@@ -63,21 +70,33 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('users.edit',compact('user'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * 更新用户信息
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(User $user)
     {
-        //
+        //验证
+        $this->validate(request(),[
+            'name' => 'bail|required|min:5|max:10',
+            'password' => 'nullable|confirmed|min:6',
+        ]);
+        $data = [];
+        $data['name'] = request('name');
+        if (request('password')) {
+            $data['password'] = bcrypt(request('password'));
+        }
+        $user->update($data);
+        session()->flash('success', '个人资料更新成功！');
+        return redirect()->route('users.show',$user->id);
     }
 
     /**

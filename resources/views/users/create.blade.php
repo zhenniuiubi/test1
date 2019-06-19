@@ -25,7 +25,7 @@
                     <label for="password_confirmation">确认密码：</label>
                     <input type="password" name="password_confirmation" class="form-control" value="">
                 </div>
-                @include('layouts.error')
+                @include('shared._errors')
                 <button type="submit" class="btn btn-primary">注册</button>
             </form>
         </div>
