@@ -7,6 +7,18 @@ use App\Models\User;
 
 class UsersController extends Controller
 {
+    //权限
+    public function __construct()
+    {
+        $this->middleware('auth',[
+            'except' => ['show','create','store','index']
+        ]);
+
+        $this->middleware('guest',[
+            'only' => ['create']
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,8 +26,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = UserModel::all();
-        dd($users);
+        $users = User::paginate(5);
+        return view('users.index',compact('users'));
     }
 
     /**
@@ -72,6 +84,8 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
+        //权限校验
+        $this->authorize('update',$user);
         return view('users.edit',compact('user'));
     }
 
@@ -84,6 +98,8 @@ class UsersController extends Controller
      */
     public function update(User $user)
     {
+        //权限校验
+        $this->authorize('update',$user);
         //验证
         $this->validate(request(),[
             'name' => 'bail|required|min:5|max:10',
@@ -100,14 +116,16 @@ class UsersController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * 删除用户
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        session()->flash('success','成功删除用户!');
+        return back();
     }
     
 }
