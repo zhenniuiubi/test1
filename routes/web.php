@@ -42,6 +42,5 @@ Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm
 //执行密码更新操作
 Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 
-// Auth::routes();
-
-// Route::get('/home', 'HomeController@index')->name('home');
+//weibo
+Route::resource('statuses', 'statusesController', ['only'=>['store','destroy']]);
