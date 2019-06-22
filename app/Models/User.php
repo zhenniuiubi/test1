@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -44,5 +46,11 @@ class User extends Authenticatable
     public function status()
     {
         return $this->hasMany(Status::class);
+    }
+
+    //内容聚合
+    public function feed()
+    {
+        return $this->status()->orderBy('created_at', 'desc');
     }
 }
