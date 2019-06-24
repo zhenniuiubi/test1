@@ -51,7 +51,11 @@ class User extends Authenticatable
     //内容聚合
     public function feed()
     {
-        return $this->status()->orderBy('created_at', 'desc');
+        // return $this->status()->orderBy('created_at', 'desc');
+        //pluck根据键名取键值对(字符串)
+        $user_ids = $this->followings->pluck('id')->toArray();
+        array_push($user_ids, $this->id);
+        return Status::query()->whereIn('user_id', $user_ids)->with('user')->orderBy('created_at', 'desc');
     }
 
     //粉丝列表
