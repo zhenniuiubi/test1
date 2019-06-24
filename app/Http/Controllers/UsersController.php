@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use Auth;
+
 class UsersController extends Controller
 {
     //权限
@@ -79,9 +80,9 @@ class UsersController extends Controller
     {
         // $user->gravatar = $this->gravatar();
         $statuses = $user->status()
-                            ->orderBy('created_at','desc')
-                            ->paginate(10);
-        return view('users.show', compact('user','statuses'));
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+        return view('users.show', compact('user', 'statuses'));
     }
 
     /**
@@ -160,4 +161,17 @@ class UsersController extends Controller
         return redirect()->route('users.show', [$user]);
     }
 
+    public function followings(User $user)
+    {
+        $users = $user->followings()->paginate(30);
+        $title = $user->name . '关注的人';
+        return view('users.show_follow', compact('users', 'title'));
+    }
+
+    public function followers(User $user)
+    {
+        $users = $user->followers()->paginate(30);
+        $title = $user->name . '粉丝';
+        return view('users.show_follow', compact('users', 'title'));
+    }
 }

@@ -44,3 +44,7 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('passw
 
 //weibo
 Route::resource('statuses', 'StatusesController', ['only'=>['store','destroy']]);
+
+//粉丝页面
+Route::get('/users/{user}/followings','UsersController@followings')->name('users.followings');
+Route::get('/users/{user}/followers','UsersController@followers')->name('users.followers');
